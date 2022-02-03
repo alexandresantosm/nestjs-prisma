@@ -7,8 +7,11 @@ import { UpdateProductDto } from './dto/update-product.dto';
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  async create(createProductDto: CreateProductDto) {
+    const createdProduct = await this.prisma.product.create({
+      data: createProductDto,
+    });
+    return createdProduct;
   }
 
   async findAll() {
