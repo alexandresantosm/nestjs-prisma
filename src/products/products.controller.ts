@@ -27,6 +27,11 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
+  @Get('/drafts')
+  findAllDrafts() {
+    return this.productsService.findAllDrafts();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
