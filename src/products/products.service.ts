@@ -49,7 +49,10 @@ export class ProductsService {
     return updatedProduct;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: string) {
+    const deletedProduct = await this.prisma.product.delete({
+      where: { id: id },
+    });
+    return deletedProduct;
   }
 }
