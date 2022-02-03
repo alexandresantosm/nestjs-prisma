@@ -20,8 +20,13 @@ export class ProductsService {
     return publishedProducts;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string) {
+    const product = await this.prisma.product.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    return product;
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
