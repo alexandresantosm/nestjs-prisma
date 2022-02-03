@@ -23,6 +23,15 @@ export class ProductsService {
     return publishedProducts;
   }
 
+  async findAllDrafts() {
+    const draftsProducts = await this.prisma.product.findMany({
+      where: {
+        published: false,
+      },
+    });
+    return draftsProducts;
+  }
+
   async findOne(id: string) {
     const product = await this.prisma.product.findUnique({
       where: {
