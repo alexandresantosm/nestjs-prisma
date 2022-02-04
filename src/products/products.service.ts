@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ProductEntity } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {
@@ -11,7 +12,8 @@ export class ProductsService {
     const createdProduct = await this.prisma.product.create({
       data: createProductDto,
     });
-    return createdProduct;
+    const createdProductEntity = new ProductEntity(createdProduct);
+    return createdProductEntity;
   }
 
   async findAll() {
@@ -20,7 +22,10 @@ export class ProductsService {
         published: true,
       },
     });
-    return publishedProducts;
+    const publishedProductsEntity = publishedProducts.map(
+      (product) => new ProductEntity(product),
+    );
+    return publishedProductsEntity;
   }
 
   async findAllDrafts() {
@@ -29,7 +34,10 @@ export class ProductsService {
         published: false,
       },
     });
-    return draftsProducts;
+    const draftsProductsEntity = draftsProducts.map(
+      (product) => new ProductEntity(product),
+    );
+    return draftsProductsEntity;
   }
 
   async findOne(id: string) {
@@ -38,7 +46,8 @@ export class ProductsService {
         id: id,
       },
     });
-    return product;
+    const productEntity = new ProductEntity(product);
+    return productEntity;
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
@@ -46,13 +55,15 @@ export class ProductsService {
       where: { id: id },
       data: updateProductDto,
     });
-    return updatedProduct;
+    const updatedProductEntity = new ProductEntity(updatedProduct);
+    return updatedProductEntity;
   }
 
   async remove(id: string) {
     const deletedProduct = await this.prisma.product.delete({
       where: { id: id },
     });
-    return deletedProduct;
+    const deletedProductEntity = new ProductEntity(deletedProduct);
+    return deletedProductEntity;
   }
 }
