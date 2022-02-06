@@ -49,6 +49,11 @@ export class ProductsController {
     return this.productsService.findAllDrafts();
   }
 
+  @Get('page')
+  findPage() {
+    return this.productsService.findPage();
+  }
+
   @Get(':id')
   @ApiOkResponse({
     description: 'The product has been successfully returned.',
