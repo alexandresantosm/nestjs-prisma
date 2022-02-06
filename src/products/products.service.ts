@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { Prisma } from '.prisma/client';
 import { findManyCursorConnection } from '@devoxa/prisma-relay-cursor-connection';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -42,9 +43,20 @@ export class ProductsService {
   }
 
   async findPage() {
+    const productsIsPublished: Prisma.ProductWhereInput = {
+      published: true,
+    };
+
     return findManyCursorConnection(
-      (args) => this.prisma.product.findMany(args),
-      () => this.prisma.product.count(),
+      (args) =>
+        this.prisma.product.findMany({
+          ...args,
+          where: productsIsPublished,
+        }),
+      () =>
+        this.prisma.product.count({
+          where: productsIsPublished,
+        }),
       {},
     );
   }
