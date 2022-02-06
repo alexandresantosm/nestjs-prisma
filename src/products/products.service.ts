@@ -5,6 +5,7 @@ import { findManyCursorConnection } from '@devoxa/prisma-relay-cursor-connection
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductEntity } from './entities/product.entity';
+import { ConnectionArgsDTO } from '../page/connection-args.dto';
 
 @Injectable()
 export class ProductsService {
@@ -42,7 +43,7 @@ export class ProductsService {
     return draftsProductsEntity;
   }
 
-  async findPage() {
+  async findPage(connectionArgsDTO: ConnectionArgsDTO) {
     const productsIsPublished: Prisma.ProductWhereInput = {
       published: true,
     };
@@ -57,7 +58,7 @@ export class ProductsService {
         this.prisma.product.count({
           where: productsIsPublished,
         }),
-      {},
+      connectionArgsDTO,
     );
   }
 
