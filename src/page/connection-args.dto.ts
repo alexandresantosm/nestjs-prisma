@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ConnectionArgs {
+export class ConnectionArgsDTO {
   @ApiProperty({ required: false })
   first?: number;
 
