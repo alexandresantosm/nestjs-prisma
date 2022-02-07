@@ -11,12 +11,44 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiResponseOptions,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { ProductEntity } from './entities/product.entity';
 import { ConnectionArgsDTO } from '../page/connection-args.dto';
+import { Page } from '../page/page.dto';
+
+const apiOkResponseWithPagination: ApiResponseOptions = {
+  schema: {
+    allOf: [
+      { $ref: getSchemaPath(Page) },
+      {
+        properties: {
+          edges: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['cursor', 'node'],
+              properties: {
+                cursor: { type: 'string' },
+                node: { type: 'object', $ref: getSchemaPath(ProductEntity) },
+              },
+            },
+          },
+        },
+      },
+    ],
+  },
+};
 
 @Controller('products')
 @ApiTags('products')
+@ApiExtraModels(Page)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
@@ -52,6 +84,7 @@ export class ProductsController {
   }
 
   @Get('page')
+  @ApiOkResponse(apiOkResponseWithPagination)
   findPage(@Query() connectionArgsDTO: ConnectionArgsDTO) {
     return this.productsService.findPage(connectionArgsDTO);
   }
