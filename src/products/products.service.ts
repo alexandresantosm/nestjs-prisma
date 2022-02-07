@@ -6,6 +6,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductEntity } from './entities/product.entity';
 import { ConnectionArgsDTO } from '../page/connection-args.dto';
+import { Page } from 'src/page/page.dto';
 
 @Injectable()
 export class ProductsService {
@@ -48,7 +49,7 @@ export class ProductsService {
       published: true,
     };
 
-    return findManyCursorConnection(
+    const productsPage = await findManyCursorConnection(
       (args) =>
         this.prisma.product.findMany({
           ...args,
@@ -59,7 +60,16 @@ export class ProductsService {
           where: productsIsPublished,
         }),
       connectionArgsDTO,
+      {
+        recordToEdge: (record) => ({
+          node: new ProductEntity(record),
+        }),
+      },
     );
+
+    const productsEntityPage = new Page<ProductEntity>(productsPage);
+
+    return new Page<ProductEntity>(productsEntityPage);
   }
 
   async findOne(id: string) {

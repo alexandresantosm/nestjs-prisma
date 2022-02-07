@@ -10,4 +10,8 @@ export class Page<Record> {
 
   @ApiProperty()
   totalCount: number;
+
+  constructor(private readonly partial: Partial<Page<Record>>) {
+    Object.assign(this, partial);
+  }
 }
