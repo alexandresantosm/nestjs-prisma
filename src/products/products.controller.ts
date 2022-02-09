@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiExtraModels,
   ApiOkResponse,
@@ -21,6 +23,7 @@ import { ProductEntity } from './entities/product.entity';
 import { ConnectionArgsDTO } from '../page/connection-args.dto';
 import { Page } from '../page/page.dto';
 import { ApiPageResponse } from '../page/api-page-response.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('products')
 @ApiTags('products')
@@ -29,6 +32,8 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({
     description: 'The product has been successfully created.',
     type: ProductEntity,
@@ -49,6 +54,8 @@ export class ProductsController {
   }
 
   @Get('/drafts')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     description:
       'The list of products not published has been successfully returned.',
@@ -75,6 +82,8 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({
     description: 'A product has been successfully updated.',
     type: ProductEntity,
@@ -84,6 +93,8 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'A product has been successfully deleted.',
     type: ProductEntity,
