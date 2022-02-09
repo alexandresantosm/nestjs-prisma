@@ -1,5 +1,9 @@
 # Building a REST API with NestJS and Prisma
 
+<p align="center">
+  <img alt="Screenshot Swagger UI with all endpoints of the application" src="./.github/screenshot-swagger.png"/>
+</p>
+
 This repository contains the starter project for the **Building a REST API with NestJS and Prisma** workshop by [Marc Stammerjohann](https://twitter.com/mrcjln).
 
 # Getting Started
@@ -31,6 +35,14 @@ yarn install
 ```bash
 npm i -g @nestjs/cli
 ```
+
+# More
+
+<p align="center">
+  <img alt="Screenshot Prisma Studio" src="./.github/screenshot-prisma-studio.png"/>
+</p>
+
+Screenshot Prisma Studio application with all models created in the database.
 
 ## Workshop
 
